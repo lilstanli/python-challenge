@@ -3,44 +3,51 @@ import csv
 
 os.system("cls")
 
+# Assign the csv path to a variable
 budgetDataPath = "Resources/budget_data.csv"
 
+# Read csv file
 with open(budgetDataPath, "r", encoding="utf8") as budgetData:
     budgetDataRead = csv.reader(budgetData, delimiter=",")
     budgetDataHeader = next(budgetDataRead)
+    fullBudget = []
+    monthlyValues = []
     monthsCount = 0
     netTotal = 0
-    monthlyValues = []
-
+    
+    # Iterate through csv data and append both the full budget and only values' lines to variables
     for line in budgetDataRead:
         monthsCount += 1
         netTotal += int(line[1])
+        fullBudget.append(line)
         monthlyValues.append(line[1])
 
+# initialise and empty list to hold the monthly changes later
 monthlyChanges = []
+
+# iterate through only the monthly values and append the calculated changes to "MonthlyChanges" variable
 for index, amount in enumerate(monthlyValues):
     if index < len(monthlyValues) and index - 1 >= 0:
-        monthlyChanges.append(int(monthlyValues[index - 1]) - int(amount))
+        monthlyChanges.append(int(amount) - int(monthlyValues[index - 1]))
 
-print(monthlyChanges)
+# Perform Average Change operation
+averageChange = round(sum(monthlyChanges)/len(monthlyChanges), 2)
 
-'''if rowCount < len(monthlyValues):
-        nextMonthlyVal = monthlyValues[rowCount + 1]
-        valchange = int(amount) - int(nextMonthlyVal)
-        monthlyChanges.append(valchange)
-        #nextMonthlyVal = monthlyValues[rowCount + 1]
-        rowCount += 1
-        '''
-#print([n for n in monthlyChanges])
+# Iterate through Monthly Changes and deduce the Greatest Increase and Greatest Decrease values
+for index, singleChange in enumerate(monthlyChanges):
+    if singleChange == max(monthlyChanges):
+        greatestIncrease = fullBudget[index + 1]
 
+    if singleChange == min(monthlyChanges):
+        greatestDecrease = fullBudget[index + 1]
 
+# Summary of Budget
 print(f'''
     Financial Analysis
     ----------------------------
     Total Months: {monthsCount}
     Total: ${netTotal}
-    Average Change: $-8311.11 ${len(monthlyValues)}
-    Greatest Increase in Profits: Aug-16 ($1862002)
-    Greatest Decrease in Profits: Feb-14 ($-1825558)
+    Average Change: ${averageChange}
+    Greatest Increase in Profits: {greatestIncrease[0]} (${max(monthlyChanges)})
+    Greatest Decrease in Profits: {greatestDecrease[0]} (${min(monthlyChanges)})
 ''')
-
