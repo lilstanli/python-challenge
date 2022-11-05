@@ -8,15 +8,15 @@ budgetDataPath = "Resources/budget_data.csv"
 
 # Read csv file
 with open(budgetDataPath, "r", encoding="utf8") as budgetData:
-    budgetDataRead = csv.reader(budgetData, delimiter=",")
-    budgetDataHeader = next(budgetDataRead)
+    budgetDataReading = csv.reader(budgetData, delimiter=",")
+    budgetDataHeader = next(budgetDataReading)
     fullBudget = []
     monthlyValues = []
     monthsCount = 0
     netTotal = 0
     
     # Iterate through csv data and append both the full budget and only values' lines to variables
-    for line in budgetDataRead:
+    for line in budgetDataReading:
         monthsCount += 1
         netTotal += int(line[1])
         fullBudget.append(line)
@@ -41,8 +41,8 @@ for index, singleChange in enumerate(monthlyChanges):
     if singleChange == min(monthlyChanges):
         greatestDecrease = fullBudget[index + 1]
 
-# Summary of Budget
-print(f'''
+# Analysis of Budget
+analysis = f'''
     Financial Analysis
     ----------------------------
     Total Months: {monthsCount}
@@ -50,4 +50,10 @@ print(f'''
     Average Change: ${averageChange}
     Greatest Increase in Profits: {greatestIncrease[0]} (${max(monthlyChanges)})
     Greatest Decrease in Profits: {greatestDecrease[0]} (${min(monthlyChanges)})
-''')
+'''
+print(analysis)
+
+#export analysis to "analysis.txt" text file
+analysisPath = "analysis/analysis.txt"
+with open(analysisPath, "x") as analysisFile:
+    analysisFile.write(analysis)
