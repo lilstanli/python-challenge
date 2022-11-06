@@ -8,7 +8,6 @@ import csv
 os.system("cls")
 
 # Assign the csv path to a variable
-#electionDataPath = "../../Instructions/PyPoll/Resources/election_data.csv"
 electionDataPath = "Resources/election_data.csv"
 
 electionDataList = []
