@@ -11,8 +11,7 @@ os.system("cls")
 #electionDataPath = "../../Instructions/PyPoll/Resources/election_data.csv"
 electionDataPath = "Resources/election_data.csv"
 
-entireElection = []
-candidateList = []
+electionDataList = []
 totalVotes = 0
 
 # Read csv file
@@ -23,21 +22,18 @@ with open(electionDataPath, "r", encoding="utf8") as electionData:
     # Iterate through csv data and append all lines to variable
     for line in readingElectionData:
         totalVotes += 1
-        entireElection.append(line)
+        electionDataList.append(line)
 
-votesByCandidateName = [v[2] for v in entireElection]
+# Grab Voting List by only Candidate Names
+votesByCandidateName = [v[2] for v in electionDataList]
 
-nextVote = entireElection[0][2]
-for index, vote in enumerate(entireElection):
-    if index < totalVotes - 1 and nextVote[2] != vote[2]:
-        candidateList.append(vote[2])
-        nextVote = entireElection[index + 1]
+# Initialise empty list to subsequently hold only names of all candidates
+candidateList = []
+[candidateList.append(li) for li in votesByCandidateName if li not in candidateList]
 
 # Append Candidate's name, Winning percentage and Vote count to List for use later
 candidateSummary = []
-for c in candidateList:
-    candidateSummary.append([c, round((((votesByCandidateName.count(c)) / totalVotes) * 100), 3), votesByCandidateName.count(c)])
-#print(candidateSummary)
+[candidateSummary.append([c, round((((votesByCandidateName.count(c)) / totalVotes) * 100), 3), votesByCandidateName.count(c)]) for c in candidateList]
 
 # Compute Winner of Election
 def winner():
@@ -48,7 +44,7 @@ def winner():
 
 # Capture the Candidate's name, Winning percentage and Vote count to a variable for use in the Final analysis
 summary = ""
-for t in range(3):
+for t in range(len(candidateList)):
     summary += f"    {candidateSummary[t][0]}: {candidateSummary[t][1]}% ({candidateSummary[t][2]})\n"
 
 # Final Analysis of Elections
@@ -59,9 +55,9 @@ analysis = f'''
     -------------------------
 {summary}    -------------------------
     Winner: {winner()}
-    -------------------------
-'''
+    -------------------------'''
 print(analysis)
+
 
 # Export analysis to "analysis.txt" text file
 analysisPath = "analysis/analysis.txt"
