@@ -1,3 +1,7 @@
+# Author: Stanley Nyarko Aboagye
+# Unit 3 Homework: Python 
+# PyBank
+
 import os
 import csv
 
@@ -27,7 +31,7 @@ monthlyChanges = []
 
 # iterate through only the monthly values and append the calculated changes to "MonthlyChanges" variable
 for index, amount in enumerate(monthlyValues):
-    if index < len(monthlyValues) and index - 1 >= 0:
+    if index < len(monthlyValues) and index > 0:
         monthlyChanges.append(int(amount) - int(monthlyValues[index - 1]))
 
 # Perform Average Change operation
@@ -37,11 +41,13 @@ averageChange = round(sum(monthlyChanges)/len(monthlyChanges), 2)
 for index, singleChange in enumerate(monthlyChanges):
     if singleChange == max(monthlyChanges):
         greatestIncrease = fullBudget[index + 1]
+    # Revisit with else
 
     if singleChange == min(monthlyChanges):
         greatestDecrease = fullBudget[index + 1]
+    # Revisit with else
 
-# Analysis of Budget
+# Final Analysis of Budget
 analysis = f'''
     Financial Analysis
     ----------------------------
@@ -53,7 +59,7 @@ analysis = f'''
 '''
 print(analysis)
 
-#export analysis to "analysis.txt" text file
+# export analysis to "analysis.txt" text file
 analysisPath = "analysis/analysis.txt"
 with open(analysisPath, "x") as analysisFile:
     analysisFile.write(analysis)
